@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const program = require('commander')
-const tasmota = require('..')
+const Tasmota = require('..')
 
 function parseColor (options) {
   const color = {}
@@ -29,96 +29,69 @@ function parseColor (options) {
   return color
 }
 
-function color (device, options) {
-  return device.color(parseColor(options)).then(color => console.log(JSON.stringify(color)))
-}
-
-function current (device) {
-  return device.current().then(current => console.log(JSON.stringify({ current })))
-}
-
-function isOn (device) {
-  return device.isOn().then(isOn => console.log(JSON.stringify({ isOn })))
-}
-
-function off (device) {
-  return device.off()
-}
-
-function on (device) {
-  return device.on()
-}
-
-function power (device) {
-  return device.power().then(power => console.log(JSON.stringify({ power })))
-}
-
-function voltage (device) {
-  return device.voltage().then(voltage => console.log(JSON.stringify({ voltage })))
-}
-
 program
-  .command('sonoff-basic <url> <command>')
-  .action((url, command) => {
-    return Promise.resolve().then(() => {
-      const device = new tasmota.SonoffBasic(url)
+  .command('status <url>')
+  .action(async url => {
+    try {
+      const device = new Tasmota(url)
 
-      switch (command) {
-        case 'is-on':
-          return isOn(device)
-        case 'off':
-          return off(device)
-        case 'on':
-          return on(device)
-      }
-    }).catch(err => console.error(err))
+      console.log(await device.status())
+    } catch (err) {
+      console.error(err)
+    }
   })
 
 program
-  .command('sonoff-b1 <url> <command>')
+  .command('on <url>')
+  .action(async url => {
+    try {
+      const device = new Tasmota(url, { features: ['Switchable'] })
+
+      await device.on()
+    } catch (err) {
+      console.error(err)
+    }
+  })
+
+program
+  .command('off <url>')
+  .action(async url => {
+    try {
+      const device = new Tasmota(url, { features: ['Switchable'] })
+
+      await device.off()
+    } catch (err) {
+      console.error(err)
+    }
+  })
+
+program
+  .command('is-on <url>')
+  .action(async url => {
+    try {
+      const device = new Tasmota(url, { features: ['Switchable'] })
+
+      console.log(await device.isOn())
+    } catch (err) {
+      console.error(err)
+    }
+  })
+
+program
+  .command('color <url>')
   .option('-r, --red [value]', 'red')
   .option('-g, --green [value]', 'green')
   .option('-b, --blue [value]', 'blue')
   .option('-c, --cold [value]', 'cold')
   .option('-w, --warm [value]', 'warm')
-  .action((url, command, options) => {
-    return Promise.resolve().then(() => {
-      const device = new tasmota.SonoffB1(url)
+  .action(async (url, options) => {
+    try {
+      const device = new Tasmota(url, { features: ['Light'] })
 
-      switch (command) {
-        case 'is-on':
-          return isOn(device)
-        case 'off':
-          return off(device)
-        case 'on':
-          return on(device)
-        case 'color':
-          return color(device, options)
-      }
-    }).catch(err => console.error(err))
-  })
-
-program
-  .command('sonoff-pow <url> <command>')
-  .action((url, command) => {
-    return Promise.resolve().then(() => {
-      const device = new tasmota.SonoffPow(url)
-
-      switch (command) {
-        case 'is-on':
-          return isOn(device)
-        case 'off':
-          return off(device)
-        case 'on':
-          return on(device)
-        case 'current':
-          return current(device)
-        case 'power':
-          return power(device)
-        case 'voltage':
-          return voltage(device)
-      }
-    }).catch(err => console.error(err))
+      await device.color(parseColor(options))
+    } catch (err) {
+      console.error(err)
+    }
   })
 
 program.parse(process.argv)
