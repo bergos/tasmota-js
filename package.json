@@ -1,6 +1,6 @@
 {
   "name": "tasmota",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Tasmota API wrapper",
   "type": "module",
   "main": "index.js",
