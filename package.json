@@ -2,9 +2,10 @@
   "name": "tasmota",
   "version": "0.0.3",
   "description": "Tasmota API wrapper",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "standard"
+    "test": "stricter-standard"
   },
   "repository": {
     "type": "git",
@@ -21,11 +22,10 @@
   },
   "homepage": "https://github.com/bergos/tasmota",
   "dependencies": {
-    "commander": "^2.18.0",
-    "lodash": "^4.17.11",
-    "nodeify-fetch": "^2.2.0"
+    "commander": "^11.1.0",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "standard": "^12.0.1"
+    "stricter-standard": "^0.3.0"
   }
 }

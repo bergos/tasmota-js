@@ -1,4 +1,4 @@
-const Tasmota = require('..')
+import Tasmota from '../index.js'
 
 async function main () {
   const device = new Tasmota('http://192.168.1.28/', {

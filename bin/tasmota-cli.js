@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
-const program = require('commander')
-const Tasmota = require('..')
+import { Command } from 'commander'
+import Tasmota from '../index.js'
+
+const program = new Command()
 
 function parseColor (options) {
   const color = {}

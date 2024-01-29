@@ -1,1 +1,3 @@
-module.exports = require('./lib/Base')
+import Base from './lib/Base.js'
+
+export default Base
